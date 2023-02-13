@@ -6,9 +6,9 @@
  *       rendered Lua code.
  */
 
-import { getGameSpeed, getPlayer, getScriptManager, Item, Keyboard, Recipe, Result, Source } from '@asledgehammer/pipewrench';
+import { getScriptManager, Item, Recipe, Result, Source } from "@asledgehammer/pipewrench";
 // PipeWrench Events API.
-import * as Events from '@asledgehammer/pipewrench-events';
+import * as Events from "@asledgehammer/pipewrench-events";
 /*
 interface GeneralObject {
   [key: string]: any
@@ -46,7 +46,13 @@ let users: Dictionary<User> = {
  * KEEP = 3
  * NOKEEP = 4
  */
-export enum WhenAdd { NORULE, DESTROY, NODESTROY, KEEP, NOKEEP }
+export enum WhenAdd {
+  NORULE,
+  DESTROY,
+  NODESTROY,
+  KEEP,
+  NOKEEP
+}
 
 interface RecipeChanges {
   filter?: RecipeFilter;
@@ -76,8 +82,7 @@ interface RecipeSourceChanges {
 }
 
 //==============================================================================
-const isNotEmptyString = (data?: string): boolean =>
-  data != null && typeof data === 'string' && data.trim().length > 0;
+const isNotEmptyString = (data?: string): boolean => data != null && typeof data === "string" && data.trim().length > 0;
 /*
 export function testStringEmpty() {
   print("null " + isNotEmptyString(undefined))
@@ -92,11 +97,11 @@ const TweakAllRecipeData: RecipeChanges[] = [];
 //==============================================================================
 function modifiRecipeResult(recipe: Recipe, resultChanges?: RecipeResultChanges) {
   if (resultChanges == null) {
-    return
+    return;
   }
 
   if (resultChanges.resultCount != null && resultChanges.resultCount > 0) {
-    const result = recipe.getResult() as Result
+    const result = recipe.getResult() as Result;
     result.setCount(resultChanges.resultCount);
   }
   if (resultChanges.resultDrainableCount != null && resultChanges.resultDrainableCount > 0) {
@@ -104,15 +109,12 @@ function modifiRecipeResult(recipe: Recipe, resultChanges?: RecipeResultChanges)
   }
 }
 
-function modifiRecipeSource(
-  recipe: Recipe,
-  sourceChange?: RecipeSourceChanges
-) {
+function modifiRecipeSource(recipe: Recipe, sourceChange?: RecipeSourceChanges) {
   if (sourceChange == null || sourceChange.sourceItem == null) {
-    return
+    return;
   }
   // for each source  in recipe trying to find item alt_target in source items
-  const recipeSources = recipe.getSource()
+  const recipeSources = recipe.getSource();
   for (let index_source = 0; index_source < recipeSources.size(); index_source++) {
     const source = recipeSources.get(index_source) as Source;
     let isSourceMatch = false;
@@ -132,13 +134,13 @@ function modifiRecipeSource(
        */
       if (sourceChange.whenadd != null) {
         if (sourceChange.whenadd == WhenAdd.DESTROY && !source.isDestroy()) {
-          break
+          break;
         } else if (sourceChange.whenadd == WhenAdd.NODESTROY && source.isDestroy()) {
-          break
+          break;
         } else if (sourceChange.whenadd == WhenAdd.KEEP && !source.isKeep()) {
-          break
+          break;
         } else if (sourceChange.whenadd == WhenAdd.NOKEEP && source.isKeep()) {
-          break
+          break;
         }
       }
       // change source count or drainableCount
@@ -156,20 +158,17 @@ function modifiRecipeSource(
             sourceItems.add(newSourcesItem);
           }
         });
-        break
+        break;
       }
     }
   }
 }
 
-function modifyRecipe(
-  recipe: Recipe,
-  recipeChanges: Array<RecipeChanges>,
-) {
+function modifyRecipe(recipe: Recipe, recipeChanges: Array<RecipeChanges>) {
   recipeChanges.forEach((recipeChange) => {
     if (!filterApply(recipe, recipeChange.filter)) {
-      modifiRecipeSource( recipe, recipeChange.sourceChange)
-      modifiRecipeResult(recipe, recipeChange.resultChanges)
+      modifiRecipeSource(recipe, recipeChange.sourceChange);
+      modifiRecipeResult(recipe, recipeChange.resultChanges);
     }
   });
 }
@@ -195,12 +194,12 @@ function filterApply(recipe: Recipe, filter?: RecipeFilter): boolean {
     }
     if (filter.includeRecipeNames != null) {
       if (filter.includeRecipeNames.indexOf(recipe.getModule().getName() + "." + recipe.getOriginalname()) === -1) {
-        return true
+        return true;
       }
     }
     if (filter.excludeRecipeNames != null) {
       if (filter.excludeRecipeNames.indexOf(recipe.getModule().getName() + "." + recipe.getOriginalname()) !== -1) {
-        return true
+        return true;
       }
     }
   }
@@ -210,19 +209,17 @@ function filterApply(recipe: Recipe, filter?: RecipeFilter): boolean {
 //==============================================================================
 function TweakOneRecipe() {
   // key -> recipeName, value -> list of changes
-  TweakOneRecipeData.forEach(
-    (recipeChanges: Array<RecipeChanges>, key: string) => {
-      const recipe = getScriptManager().getRecipe(key);
-      if (recipe != null) {
-        modifyRecipe(recipe, recipeChanges)
-      }
+  TweakOneRecipeData.forEach((recipeChanges: Array<RecipeChanges>, key: string) => {
+    const recipe = getScriptManager().getRecipe(key);
+    if (recipe != null) {
+      modifyRecipe(recipe, recipeChanges);
     }
-  );
+  });
 }
 
 /**
  * Change only one recipe
- * @param recipeName Recipe name ("Hydrocraft.Make Tailor's Workbench) 
+ * @param recipeName Recipe name ("Hydrocraft.Make Tailor's Workbench)
  * @param sourceCountChanges object of source change, use CreateRecipeSourceChanges(...)
  * @param resultChanges object resultchanges, use CreateResultChanges(...)
  * @param filter filter to filter recipes, use CreateFilter(...)
@@ -231,7 +228,7 @@ export function AddTweakOneRecipe(
   recipeName: string,
   sourceCountChanges?: RecipeSourceChanges,
   resultChanges?: RecipeResultChanges,
-  filter?: RecipeFilter,
+  filter?: RecipeFilter
 ) {
   if (!TweakOneRecipeData.has(recipeName)) {
     TweakOneRecipeData.set(recipeName, []);
@@ -239,17 +236,17 @@ export function AddTweakOneRecipe(
   TweakOneRecipeData.get(recipeName)?.push({
     resultChanges: resultChanges,
     sourceChange: sourceCountChanges,
-    filter: filter,
+    filter: filter
   });
 }
 //==============================================================================
 //==============================================================================
 //==============================================================================
 function TweakAllRecipe() {
-  const recipes = getScriptManager().getAllRecipes()
+  const recipes = getScriptManager().getAllRecipes();
   for (let index = 0; index < recipes.size(); index++) {
     const recipe = recipes.get(index);
-    modifyRecipe(recipe, TweakAllRecipeData)
+    modifyRecipe(recipe, TweakAllRecipeData);
   }
 }
 
@@ -259,82 +256,84 @@ function TweakAllRecipe() {
  * @param resultChanges object resultchanges, use CreateResultChanges(...)
  * @param filter filter to filter recipes, use CreateFilter(...)
  */
-export function AddTweakAllRecipe(
-  sourceCountChanges?: RecipeSourceChanges,
-  resultChanges?: RecipeResultChanges,
-  filter?: RecipeFilter,
-) {
+export function AddTweakAllRecipe(sourceCountChanges?: RecipeSourceChanges, resultChanges?: RecipeResultChanges, filter?: RecipeFilter) {
   TweakAllRecipeData.push({
     resultChanges: resultChanges,
     sourceChange: sourceCountChanges,
-    filter: filter,
-  })
+    filter: filter
+  });
 }
 
 //==============================================================================
 //==============================================================================
 /**
- * 
+ *
  * @param typeTag Can by found in recipe.lua (FishMeat,RiceRecipe,CanOpener....)
  * @returns  string list of items names
  */
 export function GetItemsListByTag(typeTag: string): string[] {
-  const itemsFromType = getScriptManager().getItemsTag(typeTag)
+  const itemsFromType = getScriptManager().getItemsTag(typeTag);
   if (itemsFromType.isEmpty()) {
-    return []
+    return [];
   }
-  const listOfItems: string[] = []
+  const listOfItems: string[] = [];
   for (let index = 0; index < itemsFromType.size(); index++) {
     const item = itemsFromType.get(index) as Item;
-    listOfItems.push(item.getFullName())
+    listOfItems.push(item.getFullName());
   }
-  return listOfItems
+  return listOfItems;
 }
 
 /**
  * Create filter for filtering recipes
  * @param modName filter by mod name like "Hydrcraft"
  * @param includeRecipeNames list of names like  ["Hydrocraft.Make Bottle of Juice"] to include in change
- * @param excludeRecipeNames list of names like  ["Hydrocraft.Make Bottle of Juice"] to exclude in change 
+ * @param excludeRecipeNames list of names like  ["Hydrocraft.Make Bottle of Juice"] to exclude in change
  * @param resultName Name of result to match in recipe "Hydrocraft.Make Bottle of Juice"
  * @param resultCount number of result like 3
  * @returns  return filter object
  */
-export function CreateFilter(modName?: string, includeRecipeNames?: Array<string>, excludeRecipeNames?: Array<string>, resultName?: string, resultCount?: string | number): RecipeFilter {
-  const recipeFilter: RecipeFilter = {}
-  if (modName != undefined && typeof (modName) === "string") {
-    recipeFilter.modName = modName
+export function CreateFilter(
+  modName?: string,
+  includeRecipeNames?: Array<string>,
+  excludeRecipeNames?: Array<string>,
+  resultName?: string,
+  resultCount?: string | number
+): RecipeFilter {
+  const recipeFilter: RecipeFilter = {};
+  if (modName != undefined && typeof modName === "string") {
+    recipeFilter.modName = modName;
   }
-  if (resultName != undefined && typeof (resultName) === "string") {
-    recipeFilter.resultName = resultName
+  if (resultName != undefined && typeof resultName === "string") {
+    recipeFilter.resultName = resultName;
   }
-  if (resultCount != undefined && (typeof (resultCount) === "string" || typeof (resultCount) === "number")) {
-    recipeFilter.resultCount = tonumber(resultCount)
+  if (resultCount != undefined && (typeof resultCount === "string" || typeof resultCount === "number")) {
+    recipeFilter.resultCount = tonumber(resultCount);
   }
-  if (includeRecipeNames != null && (typeof (includeRecipeNames) === "object")) {
-    recipeFilter.includeRecipeNames = includeRecipeNames
+  if (includeRecipeNames != null && typeof includeRecipeNames === "object") {
+    recipeFilter.includeRecipeNames = includeRecipeNames;
   }
-  if (excludeRecipeNames != null && (typeof (excludeRecipeNames) === "object")) {
-    recipeFilter.excludeRecipeNames = excludeRecipeNames
+  if (excludeRecipeNames != null && typeof excludeRecipeNames === "object") {
+    recipeFilter.excludeRecipeNames = excludeRecipeNames;
   }
-  return recipeFilter
+  return recipeFilter;
 }
 
 /**
  * Cahnging result count
- * @param resultCount 
- * @param resultDrainableCount 
- * @returns 
+ * @param resultCount
+ * @param resultDrainableCount
+ * @returns
  */
 export function CreateResultChanges(resultCount?: number | string, resultDrainableCount?: number | string): RecipeResultChanges {
-  const resultChanges: RecipeResultChanges = {}
-  if (resultCount != undefined && (typeof (resultCount) === "string" || typeof (resultCount) === "number")) {
-    resultChanges.resultCount = tonumber(resultCount)
+  const resultChanges: RecipeResultChanges = {};
+  if (resultCount != undefined && (typeof resultCount === "string" || typeof resultCount === "number")) {
+    resultChanges.resultCount = tonumber(resultCount);
   }
-  if (resultDrainableCount != undefined && (typeof (resultDrainableCount) === "string" || typeof (resultDrainableCount) === "number")) {
-    resultChanges.resultDrainableCount = tonumber(resultDrainableCount)
+  if (resultDrainableCount != undefined && (typeof resultDrainableCount === "string" || typeof resultDrainableCount === "number")) {
+    resultChanges.resultDrainableCount = tonumber(resultDrainableCount);
   }
-  return resultChanges
+  return resultChanges;
 }
 
 /**
@@ -346,20 +345,26 @@ export function CreateResultChanges(resultCount?: number | string, resultDrainab
  * @param whenadd enum of when to change source ( )
  * @returns object of source changes
  */
-export function CreateRecipeSourceChanges(sourceItem: string, sourcesNewItemsList?: Array<string>, sourceCount?: string | number, sourceDrainableCount?: string | number, whenadd?: WhenAdd): RecipeSourceChanges {
-  const recipeSourceChanges: RecipeSourceChanges = { sourceItem: sourceItem }
-  if (sourceCount != undefined && (typeof (sourceCount) === "string" || typeof (sourceCount) === "number")) {
-    recipeSourceChanges.sourceCount = tonumber(sourceCount)
+export function CreateRecipeSourceChanges(
+  sourceItem: string,
+  sourcesNewItemsList?: Array<string>,
+  sourceCount?: string | number,
+  sourceDrainableCount?: string | number,
+  whenadd?: WhenAdd
+): RecipeSourceChanges {
+  const recipeSourceChanges: RecipeSourceChanges = { sourceItem: sourceItem };
+  if (sourceCount != undefined && (typeof sourceCount === "string" || typeof sourceCount === "number")) {
+    recipeSourceChanges.sourceCount = tonumber(sourceCount);
   }
-  if (sourceDrainableCount != undefined && (typeof (sourceDrainableCount) === "string" || typeof (sourceDrainableCount) === "number")) {
-    recipeSourceChanges.sourceDrainableCount = tonumber(sourceDrainableCount)
+  if (sourceDrainableCount != undefined && (typeof sourceDrainableCount === "string" || typeof sourceDrainableCount === "number")) {
+    recipeSourceChanges.sourceDrainableCount = tonumber(sourceDrainableCount);
   }
-  if (sourcesNewItemsList != undefined && typeof (sourcesNewItemsList) === "object") {
-    recipeSourceChanges.sourcesNewItemsList = sourcesNewItemsList
+  if (sourcesNewItemsList != undefined && typeof sourcesNewItemsList === "object") {
+    recipeSourceChanges.sourcesNewItemsList = sourcesNewItemsList;
   }
-  recipeSourceChanges.whenadd = whenadd
+  recipeSourceChanges.whenadd = whenadd;
 
-  return recipeSourceChanges
+  return recipeSourceChanges;
 }
 //==============================================================================
 //==============================================================================
@@ -374,9 +379,6 @@ Events.onKeyPressed.addListener((key) => {
 });
 */
 Events.onGameBoot.addListener(() => {
-  TweakOneRecipe()
-  TweakAllRecipe()
+  TweakOneRecipe();
+  TweakAllRecipe();
 });
-
-
-
