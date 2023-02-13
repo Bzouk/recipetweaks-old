@@ -1,0 +1,30 @@
+/* Module name=file:mod.info id */
+/* Can overwrite items */
+/* Not working for recipes */
+module Hydrocraft
+{
+
+item HCWoodenbucketvegoil
+{
+	Weight = 1.8,
+	WeightEmpty = 1,
+	Type = Food,
+	CantBeFrozen = TRUE,
+	EvolvedRecipe = Sandwich:2;Sandwich Baguette:2;Burger:2;RicePot:2;RicePan:2;PastaPot:2;PastaPan:2;Stir fry Griddle Pan:2;Stir fry:2;Salad:2;Roasted Vegetables:2;Taco:2;Burrito:2;Soup:5;Stew:5,
+	HungerChange = -120,
+	UnhappyChange = 50,
+	Calories = 8480,
+	Carbohydrates = 0,
+	Lipids = 520,
+	Proteins = 0,
+	DisplayName = Wooden Bucket with Vegetable Oil Bzouk,
+	Icon = HCWoodenbucketvegoil,
+	ReplaceOnUse = HCWoodenbucket,
+	Tags = BakingFat;Oil;MinorIngredient,
+	FoodType = Oil,
+	DisplayCategory = CraftChem,
+	Override: true,/* probably not needed */
+}
+}
+
+

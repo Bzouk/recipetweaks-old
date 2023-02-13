@@ -1,4 +1,5 @@
-name=PipeWrenchModTemplate
-poster=poster.png
-description=PipeWrenchModTemplate
-id=pipewrench_mod_template
+name=RecipeTweaks
+poster=./poster.png
+description=Recipe tweaks API
+id=recipetweaks
+url=https://github.com/Bzouk/recipetweaks

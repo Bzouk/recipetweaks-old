@@ -24,6 +24,5 @@
         "name": "@asledgehammer/tstl-pipewrench"
       }
     ]
-  },
-  "include": ["src"]
+  }
 }

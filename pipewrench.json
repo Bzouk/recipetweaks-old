@@ -1,10 +1,10 @@
 {
   "modInfo": {
-    "name": "My First Mod",
+    "name": "RecipeTweaks",
     "poster": "./poster.png",
-    "description": "arf",
-    "id": "12312312",
-    "url": "https://www.google.com,"
+    "description": "Recipe tweaks API",
+    "id": "recipetweaks",
+    "url": "https://github.com/Bzouk/recipetweaks"
   },
   "modelsDir": "./src/models",
   "texturesDir": "./src/textures",

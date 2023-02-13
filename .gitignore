@@ -1,3 +1,5 @@
 media/lua/
 node_modules/
 dist/
+.github
+.vs
