@@ -46,7 +46,14 @@ let users: Dictionary<User> = {
  * KEEP = 3
  * NOKEEP = 4
  */
-export enum WhenAdd {
+
+
+
+//declare let NEW_GLOBAL: string;
+//export const ss = WhenAdd2.DESTROY
+//NEW_GLOBAL = "5"
+
+export  enum WhenAdd {
   NORULE,
   DESTROY,
   NODESTROY,
@@ -95,18 +102,20 @@ const TweakOneRecipeData = new Map<string, Array<RecipeChanges>>();
 const TweakAllRecipeData: RecipeChanges[] = [];
 
 //==============================================================================
-function modifiRecipeResult(recipe: Recipe, resultChanges?: RecipeResultChanges) {
-  if (resultChanges == null) {
-    return;
-  }
-
-  if (resultChanges.resultCount != null && resultChanges.resultCount > 0) {
-    const result = recipe.getResult() as Result;
-    result.setCount(resultChanges.resultCount);
-  }
-  if (resultChanges.resultDrainableCount != null && resultChanges.resultDrainableCount > 0) {
-    recipe.getResult().setDrainableCount(resultChanges.resultDrainableCount);
-  }
+function modifiRecipeResult(recipe: Recipe, resultChanges?: RecipeResultChanges): void {
+	if (resultChanges == null) return;  // Return early if result changes are unspecified
+  // Check if result count has been specified and is greater than 0
+	if (resultChanges.resultCount != null && resultChanges.resultCount > 0) {
+		// Get the recipe's result as type Result
+		const result = recipe.getResult() as Result;
+		// Set the result count to the specified value
+		result.setCount(resultChanges.resultCount);
+	}
+  // Check if drainable result count has been specified and is greater than 0
+	if (resultChanges.resultDrainableCount != null && resultChanges.resultDrainableCount > 0) {
+		// Set the drainable result count to the specified value
+		recipe.getResult().setDrainableCount(resultChanges.resultDrainableCount);
+	}
 }
 
 function modifiRecipeSource(recipe: Recipe, sourceChange?: RecipeSourceChanges) {
@@ -345,7 +354,7 @@ export function CreateResultChanges(resultCount?: number | string, resultDrainab
  * @param whenadd enum of when to change source ( )
  * @returns object of source changes
  */
-export function CreateRecipeSourceChanges(
+ export function CreateRecipeSourceChanges(
   sourceItem: string,
   sourcesNewItemsList?: Array<string>,
   sourceCount?: string | number,
