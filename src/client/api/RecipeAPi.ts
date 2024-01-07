@@ -6,7 +6,7 @@
  *       rendered Lua code.
  */
 
-import { getScriptManager, Item, Recipe, Result, Source } from "@asledgehammer/pipewrench";
+import { getScriptManager, Item, Recipe, Result, Source, Keyboard, getPlayer, getGameSpeed } from "@asledgehammer/pipewrench";
 // PipeWrench Events API.
 import * as Events from "@asledgehammer/pipewrench-events";
 /*

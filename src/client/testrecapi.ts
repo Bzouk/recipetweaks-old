@@ -25,7 +25,8 @@ if (getActivatedMods().contains("Hydrocraft")) {
     undefined,
     CreateFilter("Hydrocraft", ["Hydrocraft.Fill Trough with Vegetable Oil"])
   );
-  AddTweakAllRecipe(CreateRecipeSourceChanges("Base.Needle", ["Hydrocraft.HCBoneneedle"]));
+  AddTweakAllRecipe(CreateRecipeSourceChanges("Base.Neelde", ["Hydrocraft.HCBoneneedle"]));
+  AddTweakAllRecipe(CreateRecipeSourceChanges("Base.TinCanEmpty", ["Hydrocraft.HCTincan"]));
   AddTweakAllRecipe(
     CreateRecipeSourceChanges("Hydrocraft.HCWoodenbucketconcrete", ["Base.BucketConcreteFull"], undefined, undefined, WhenAdd.NODESTROY),
     undefined,
@@ -33,6 +34,14 @@ if (getActivatedMods().contains("Hydrocraft")) {
   );
   AddTweakAllRecipe(CreateRecipeSourceChanges("Base.Hammer", GetItemsListByTag("Hammer")), undefined, CreateFilter("Hydrocraft"));
   AddTweakAllRecipe(undefined, CreateResultChanges(5), CreateFilter("Hydrocraft", ["Hydrocraft.Make Bottle of Juice"], undefined, undefined, 1)); //CreateRecipeSourceChanges("Base.Apple", [],undefined,undefined,WhenAdd.NODESTROY)
+}
+
+if (getActivatedMods().contains("Hydrocraft") && getActivatedMods().contains("sapphcooking")) {
+  AddTweakAllRecipe(
+    CreateRecipeSourceChanges("SapphCooking.WokPan", ["Hydrocraft.HCWok"], undefined, undefined, WhenAdd.NORULE),
+    undefined,
+    CreateFilter("SapphCooking")
+  );
 }
 
 if (getActivatedMods().contains("Hydrocraft") && getActivatedMods().contains("DLTS")) {
@@ -50,3 +59,20 @@ if (getActivatedMods().contains("Hydrocraft") && getActivatedMods().contains("DL
     ])
   );
 }
+
+
+//if (getActivatedMods().contains("MoreBrewsWineMeUp")) {
+  AddTweakOneRecipe(
+    "MoreBrews.Fruit Yeast Starter",
+    CreateRecipeSourceChanges("Base.SugarPacket", undefined,0,5, WhenAdd.NORULE),
+  );
+  AddTweakOneRecipe(
+    "MoreBrews.Potato Yeast Starter",
+    CreateRecipeSourceChanges("Base.SugarPacket", undefined,0,5, WhenAdd.NORULE),
+  );
+  AddTweakOneRecipe(
+    "MoreBrews.Wild Plants Yeast Starter",
+    CreateRecipeSourceChanges("Base.SugarPacket", undefined,0,5, WhenAdd.NORULE),
+  );
+//}
+
