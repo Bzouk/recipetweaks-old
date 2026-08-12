@@ -25,7 +25,7 @@ if (getActivatedMods().contains("Hydrocraft")) {
     undefined,
     CreateFilter("Hydrocraft", ["Hydrocraft.Fill Trough with Vegetable Oil"])
   );
-  AddTweakAllRecipe(CreateRecipeSourceChanges("Base.Neelde", ["Hydrocraft.HCBoneneedle"]));
+  AddTweakAllRecipe(CreateRecipeSourceChanges("Base.Needle", ["Hydrocraft.HCBoneneedle"]));
   AddTweakAllRecipe(CreateRecipeSourceChanges("Base.TinCanEmpty", ["Hydrocraft.HCTincan"]));
   AddTweakAllRecipe(
     CreateRecipeSourceChanges("Hydrocraft.HCWoodenbucketconcrete", ["Base.BucketConcreteFull"], undefined, undefined, WhenAdd.NODESTROY),
